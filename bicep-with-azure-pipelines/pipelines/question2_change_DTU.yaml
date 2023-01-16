@@ -1,0 +1,52 @@
+trigger: none
+
+pool:
+ name: "da-selfhosted-agent"
+
+variables:
+- group: "da-showcase"
+
+parameters:
+  - name: DTU
+    type: string
+  - name: DatabaseDtuMax
+    type: string
+  - name: DatabaseDtuMin
+    type: string
+  - name: ResourceGroupName
+    displayName: "Resource Group"
+    type: string
+  - name: ServerName
+    displayName: SQL Server Name
+    type: string
+  - name: ElasticPoolName
+    displayName: Elastic Pool Name
+    type: string
+  - name: ApplicationId
+    displayName: App Registration Id
+    type: string
+  - name: TenantId
+    displayName: AD Tenant Id
+    type: string
+    
+steps:
+- task: PowerShell@2
+  inputs:
+    errorActionPreference: continue
+    targetType: 'inline'
+    script: |
+      Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
+
+      if (Get-Module -ListAvailable -Name Az) {
+          Write-Host "Module exists"
+      } 
+      else {
+          Write-Host "Module does not exist"
+          Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
+      }
+- task: PowerShell@2
+  inputs:
+    errorActionPreference: continue
+    targetType: 'inline'
+    script: |
+      pwsh 'scripts/changeDTUSql.ps1' -ServerName ${{parameters.ServerName}} -ElasticPoolName ${{parameters.ElasticPoolName}} -ClientSecret "$(ClientSecret)" -TenantId ${{parameters.TenantId}} -ApplicationId ${{parameters.ApplicationId}} -DTU ${{parameters.DTU}} -DatabaseDtuMax ${{parameters.DatabaseDtuMax}} -DatabaseDtuMin ${{parameters.DatabaseDtuMin}} -ResourceGroupName ${{parameters.ResourceGroupName}}

@@ -1,0 +1,51 @@
+trigger: none
+
+pool:
+ name: "da-selfhosted-agent"
+
+steps:
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: Deploying App 1 - Dog (Aus timezone)
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'showcase-sp'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'showcase'
+    location: 'uksouth'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(System.DefaultWorkingDirectory)/infrastructure/bicep/linux-fa/function-app.bicep'
+    overrideParameters: '-name dwshowcase-dog -timezone AU -hostingPlanName dw-hostingplan'
+    csmParametersFile: '$(System.DefaultWorkingDirectory)/infrastructure/bicep/linux-fa/parameters.json'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
+
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: Deploying App 2 - Cat
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'showcase-sp'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'showcase'
+    location: 'uksouth'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(System.DefaultWorkingDirectory)/infrastructure/bicep/linux-fa/function-app.bicep'
+    csmParametersFile: '$(System.DefaultWorkingDirectory)/infrastructure/bicep/linux-fa/parameters.json'
+    overrideParameters: '-name dwshowcase-cat -hostingPlanName dw-hostingplan'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
+
+- task: AzureResourceManagerTemplateDeployment@3
+  displayName: Deploying App 3 - Sengi
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'showcase-sp'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'showcase'
+    location: 'uksouth'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(System.DefaultWorkingDirectory)/infrastructure/bicep/linux-fa/function-app.bicep'
+    csmParametersFile: '$(System.DefaultWorkingDirectory)/infrastructure/bicep/linux-fa/parameters.json'
+    overrideParameters: '-name dwshowcase-sengi -hostingPlanName dw-hostingplan'
+    deploymentMode: 'Incremental'
+    deploymentName: 'DeployPipelineTemplate'
+

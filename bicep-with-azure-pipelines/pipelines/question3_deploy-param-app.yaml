@@ -1,0 +1,48 @@
+trigger: none
+
+pool:
+ name: "da-selfhosted-agent"
+
+parameters:
+  - name: App_Name
+    displayName: "Application Name"
+    type: string
+    default: "sengi_svc"
+
+variables:
+  buildConfiguration: 'Release'
+  dotNetFramework: 'net6.0'
+  dotNetVersion: '6.0.x'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    version: $(dotNetVersion)
+    includePreviewVersions: true
+- script: |
+    set -e
+    cd apps/windows/sengi_svc
+    dotnet publish --configuration $(buildConfiguration)
+  displayName: 'Build .NET 6 Application'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --framework $(dotNetFramework) --runtime $(targetRuntime) --self-contained --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+    projects: 'apps/windows/sengi_svc'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'MinimalAPI'
+
+- task: AzureWebApp@1
+  inputs:
+    appType: 'webApp'
+    azureSubscription: 'showcase-sp'
+    appName: $(App_Name)
+    package: $(Build.ArtifactStagingDirectory)/**/*.zip
+
+  

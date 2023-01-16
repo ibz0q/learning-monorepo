@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "value": "a6770b4c-f625-411e-aa8a-4b59eb69a4e9"
+        },
+        "name": {
+            "value": "dwshowcase-example"
+        },
+        "location": {
+            "value": "UK South"
+        },
+        "timezone": {
+            "value": "GB"
+        },
+        "hostingPlanName": {
+            "value": "asp-showcase-81cf"
+        },
+        "serverFarmResourceGroup": {
+            "value": "showcase"
+        },
+        "ftpsState": {
+            "value": "FtpsOnly"
+        },
+        "storageAccountName": {
+            "value": "showcaseb23b"
+        },
+        "sku": {
+            "value": "Dynamic"
+        },
+        "skuCode": {
+            "value": "Y1"
+        },
+        "workerSize": {
+            "value": "0"
+        },
+        "workerSizeId": {
+            "value": "0"
+        },
+        "numberOfWorkers": {
+            "value": "1"
+        },
+        "use32BitWorkerProcess": {
+            "value": false
+        },
+        "linuxFxVersion": {
+            "value": "Node|16"
+        }
+    }
+}
